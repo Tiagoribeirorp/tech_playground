@@ -1,8 +1,9 @@
 import React from 'react';
+// A importação do tipo de gráfico (Radar) continua!
 import { Radar } from 'react-chartjs-2';
-import { Chart as ChartJS, RadialLinearScale, PointElement, LineElement, Filler, Tooltip, Legend } from 'chart.js';
 
-ChartJS.register(RadialLinearScale, PointElement, LineElement, Filler, Tooltip, Legend);
+// AS LINHAS DE 'Chart as ChartJS' E 'ChartJS.register' FORAM REMOVIDAS DAQUI.
+// Elas agora vivem no arquivo 'src/chartConfig.js' e são chamadas no 'src/index.js'.
 
 const MediaFeedbackChart = ({ data }) => {
   const labels = [
@@ -10,10 +11,11 @@ const MediaFeedbackChart = ({ data }) => {
     'Interação Gestor', 'Clareza Carreira', 'Expectativa Permanência'
   ];
   
-  const chartValues = [
+  // Garante que 'data' exista antes de tentar acessar suas propriedades
+  const chartValues = data ? [
     data.interesse, data.contribuicao, data.aprendizado, data.feedback,
     data.interacao_gestor, data.clareza_carreira, data.expectativa_permanencia
-  ].map(val => parseFloat(val || 0).toFixed(2)); // Garante que é um número e formata
+  ].map(val => parseFloat(val || 0).toFixed(2)) : []; // Se não houver dados, usa um array vazio
 
   const chartData = {
     labels,
