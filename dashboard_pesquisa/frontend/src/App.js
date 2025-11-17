@@ -1,62 +1,81 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import './App.css';
-
-// Importação dos componentes
 import Filtros from './components/Filtros';
 import FuncionariosPorAreaChart from './components/FuncionariosPorAreaChart';
 import MediaFeedbackChart from './components/MediaFeedbackChart';
 import EnpsDistribuicaoChart from './components/EnpsDistribuicaoChart';
 
+const API_BASE_URL = 'http://localhost:3001/api';
+
 function App() {
-  // --- ESTADOS DO COMPONENTE ---
   const [dashboardData, setDashboardData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  
-  // Estados para os filtros
   const [filtros, setFiltros] = useState({ area: '', cargo: '' });
 
-  // --- LÓGICA DE BUSCA DE DADOS ---
   const fetchData = useCallback(async () => {
-    setLoading(true); // Garante que o loading apareça em cada nova busca
+    setLoading(true);
     setError(null);
 
-    // Constrói os parâmetros da URL a partir do estado dos filtros
     const params = new URLSearchParams(filtros).toString();
-    const url = `http://localhost:3001/api/dashboard-data?${params}`;
     
-    console.log(`Buscando dados da URL: ${url}` );
+    const endpoints = {
+      filtros: `${API_BASE_URL}/filters`,
+      enps: `${API_BASE_URL}/kpis/enps?${params}`,
+      funcionariosPorArea: `${API_BASE_URL}/employees/by-area?${params}`
+    };
 
     try {
-      const response = await axios.get(url);
-      setDashboardData(response.data);
+      const [
+        filtrosResponse, 
+        enpsResponse, 
+        funcionariosPorAreaResponse
+      ] = await Promise.all([
+        axios.get(endpoints.filtros),
+        axios.get(endpoints.enps),
+        axios.get(endpoints.funcionariosPorArea)
+      ]);
+
+      const enpsData = enpsResponse.data;
+      const funcionariosPorAreaData = funcionariosPorAreaResponse.data;
+      const filtrosData = filtrosResponse.data;
+
+      const mediaFeedbackPlaceholder = [
+        { name: 'Interesse no Cargo', value: 0 },
+        { name: 'Feedback', value: 0 }
+      ];
+
+      const consolidatedData = {
+        filtros: filtrosData,
+        funcionariosPorArea: funcionariosPorAreaData,
+        distribuicaoEnps: enpsData.distribuicao || [],
+        mediaFeedback: enpsData.mediaFeedback || mediaFeedbackPlaceholder,
+        enpsScore: enpsData.enpsScore
+      };
+
+      setDashboardData(consolidatedData);
+
     } catch (err) {
       console.error("Erro ao carregar dados do dashboard:", err);
       setError("Não foi possível carregar os dados. Verifique o console e o servidor backend.");
     } finally {
-      setLoading(false); // Garante que o loading termine, com sucesso ou erro
+      setLoading(false);
     }
-  }, [filtros]); // A função é recriada apenas quando os filtros mudam
+  }, [filtros]);
 
-  // Efeito para buscar os dados na montagem inicial e quando os filtros mudam
   useEffect(() => {
     fetchData();
   }, [fetchData]);
 
-  // --- LÓGICA DE RENDERIZAÇÃO ---
-
-  // 1. Estado de Carregamento
   if (loading) {
     return <div className="status-message loading">Carregando Dashboard...</div>;
   }
 
-  // 2. Estado de Erro
   if (error) {
     return <div className="status-message error">{error}</div>;
   }
 
-  // 3. Estado de Sucesso (só renderiza se não estiver carregando e não houver erro)
   return (
     <div className="App">
       <header className="App-header">

@@ -1,4 +1,3 @@
-// server.js --- VERSÃO FINAL COM API REATORADA (TASK 9)
 const express = require('express');
 const { Pool } = require('pg');
 const cors = require('cors');
@@ -14,11 +13,11 @@ app.use(express.json());
 // --- Configuração da Conexão com o Banco de Dados ---
 // Lê as credenciais das variáveis de ambiente (para Docker) ou usa valores padrão.
 const pool = new Pool({
-  user: process.env.POSTGRES_USER || 'postgres',
-  host: process.env.POSTGRES_HOST || 'localhost',
-  database: process.env.POSTGRES_DB || 'postgres',
-  password: process.env.POSTGRES_PASSWORD || 'Bioquimica@1',
-  port: 5432,
+  user: process.env.DB_USER || 'postgres', // CORREÇÃO: Usando DB_USER
+  host: process.env.DB_HOST || 'localhost', // CORREÇÃO: Usando DB_HOST (que é 'db' no Docker)
+  database: process.env.DB_NAME || 'postgres', // CORREÇÃO: Usando DB_NAME
+  password: process.env.DB_PASSWORD || 'Bioquimica@1', // CORREÇÃO: Usando DB_PASSWORD
+  port: process.env.DB_PORT || 5432, // CORREÇÃO: Usando DB_PORT
 });
 
 // --- Funções Auxiliares ---
