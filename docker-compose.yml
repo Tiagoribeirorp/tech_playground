@@ -6,42 +6,32 @@ services:
 
   # --- Serviço do Banco de Dados (PostgreSQL) ---
   db:
-    image: postgres:14-alpine  # Usa uma imagem oficial e leve do PostgreSQL
+    image: postgres:14-alpine
     container_name: dashboard_db
-    restart: always # Sempre reinicia o container se ele parar
+    restart: always
     environment:
       - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=Bioquimica@1 # A mesma senha que usamos no server.js
+      - POSTGRES_PASSWORD=Bioquimica@1
       - POSTGRES_DB=postgres
     ports:
-      # Mapeia a porta 5432 do container para a porta 5432 da sua máquina
-      # para que você possa se conectar com o DBeaver se quiser.
       - "5432:5432"
     volumes:
-      # Cria um "volume" chamado 'postgres_data' para persistir os dados do banco.
-      # Isso garante que, mesmo que você destrua o container, seus dados não sejam perdidos.
       - postgres_data:/var/lib/postgresql/data
-      # --- ADICIONE ESTA LINHA ---
-      # Mapeia nossa pasta de inicialização para uma pasta especial dentro do container.
-      # O PostgreSQL executa automaticamente qualquer .sql ou .sh encontrado aqui.
+      # Certifique-se de que a pasta 'db_init' existe e contém o init.sql
       - ./db_init:/docker-entrypoint-initdb.d
 
   # --- Serviço do Backend (Node.js API) ---
   backend:
     container_name: dashboard_backend
-    # Instrui o Docker Compose a construir a imagem usando o Dockerfile especificado
     build:
-      context: . # O contexto é a pasta atual (TECH_PLAYGROUND)
-      dockerfile: backend.Dockerfile # O nome do nosso Dockerfile do backend
+      context: .
+      dockerfile: backend.Dockerfile
     restart: always
     ports:
-      # Mapeia a porta 3001 do container para a porta 3001 da sua máquina
       - "3001:3001"
     depends_on:
-      - db # Diz ao Docker para esperar o serviço 'db' estar pronto antes de iniciar o backend
+      - db
     environment:
-      # Variáveis de ambiente para o backend se conectar ao banco de dados
-      # Usamos os nomes dos serviços do Docker Compose (ex: 'db') como host
       - DB_HOST=db
       - DB_USER=postgres
       - DB_PASSWORD=Bioquimica@1
@@ -52,15 +42,31 @@ services:
   frontend:
     container_name: dashboard_frontend
     build:
-      context: . # O contexto é a pasta atual
-      dockerfile: frontend.Dockerfile # O nome do nosso Dockerfile do frontend
+      context: .
+      dockerfile: frontend.Dockerfile
     restart: always
     ports:
-      # Mapeia a porta 80 do container (Nginx) para a porta 8080 da sua máquina
-      # Usamos 8080 para não dar conflito com outros serviços que possam usar a porta 80
       - "8080:80"
     depends_on:
-      - backend # Espera o backend estar pronto antes de iniciar
+      - backend
+
+  # --- NOVO SERVIÇO: Streamlit (Python Dashboard) ---
+  streamlit:
+    container_name: dashboard_streamlit
+    build:
+      context: .
+      # O Dockerfile para o Streamlit deve ser criado na raiz do projeto
+      dockerfile: streamlit.Dockerfile
+    restart: always
+    ports:
+      # A porta 8501 é a porta padrão do Streamlit
+      - "8501:8501"
+    depends_on:
+      - db # O Streamlit precisa do banco de dados para carregar os dados
+    volumes:
+      # Mapeia a pasta de código para que as alterações no app.py sejam refletidas
+      # O Streamlit está configurado para rodar o app.py dentro do container
+      - ./data_analysis:/app
 
 # Define os volumes que serão gerenciados pelo Docker
 volumes:
