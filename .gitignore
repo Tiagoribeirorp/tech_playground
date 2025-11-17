@@ -18,3 +18,6 @@ yarn-error.log*
 
 # Pasta de build do frontend (opcional, mas recomendado)
 dashboard_pesquisa/frontend/build/
+
+# Data analysis
+data_analysis/.venv/
