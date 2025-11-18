@@ -20,7 +20,7 @@ CREATE TABLE IF NOT EXISTS bronze.pesquisa_satisfacao (
     n2_gerencia VARCHAR(255),
     n3_coordenacao VARCHAR(255),
     n4_area VARCHAR(255),
-    data_da_resposta DATE,
+    data_da_resposta VARCHAR(50),
     interesse_no_cargo INTEGER,
     comentarios_interesse_cargo TEXT,
     contribuicao INTEGER,
@@ -38,3 +38,7 @@ CREATE TABLE IF NOT EXISTS bronze.pesquisa_satisfacao (
     enps INTEGER,
     aberta_enps TEXT
 );
+-- ⭐⭐ ADICIONE ESTA LINHA ⭐⭐
+-- Insere os dados do CSV (APENAS UMA VEZ)
+-- ⭐⭐ Tente com \copy (funciona melhor no Docker) ⭐⭐
+\copy bronze.pesquisa_satisfacao FROM '/docker-entrypoint-initdb.d/data1.csv' DELIMITER ';' CSV HEADER;

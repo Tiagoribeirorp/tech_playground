@@ -1,10 +1,4 @@
-# Versão do Docker Compose que estamos usando
-version: '3.8'
-
-# A seção onde definimos todos os nossos containers (serviços)
 services:
-
-  # --- Serviço do Banco de Dados (PostgreSQL) ---
   db:
     image: postgres:14-alpine
     container_name: dashboard_db
@@ -17,15 +11,13 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
-      # Certifique-se de que a pasta 'db_init' existe e contém o init.sql
       - ./db_init:/docker-entrypoint-initdb.d
 
-  # --- Serviço do Backend (Node.js API) ---
   backend:
     container_name: dashboard_backend
     build:
-      context: .
-      dockerfile: backend.Dockerfile
+      context: .  # ✅ Raiz
+      dockerfile: backend.Dockerfile  # ✅ Na raiz
     restart: always
     ports:
       - "3001:3001"
@@ -38,36 +30,31 @@ services:
       - DB_NAME=postgres
       - DB_PORT=5432
 
-  # --- Serviço do Frontend (React + Nginx) ---
   frontend:
     container_name: dashboard_frontend
     build:
-      context: .
-      dockerfile: frontend.Dockerfile
+      context: .  # ✅ Raiz
+      dockerfile: frontend.Dockerfile  # ✅ Na raiz
     restart: always
     ports:
       - "8080:80"
     depends_on:
       - backend
+    environment:
+      - REACT_APP_API_URL=http://localhost:3001/api
 
-  # --- NOVO SERVIÇO: Streamlit (Python Dashboard) ---
   streamlit:
     container_name: dashboard_streamlit
     build:
-      context: .
-      # O Dockerfile para o Streamlit deve ser criado na raiz do projeto
-      dockerfile: streamlit.Dockerfile
+      context: .  # ✅ Raiz
+      dockerfile: streamlit.Dockerfile  # ✅ Na raiz
     restart: always
     ports:
-      # A porta 8501 é a porta padrão do Streamlit
       - "8501:8501"
     depends_on:
-      - db # O Streamlit precisa do banco de dados para carregar os dados
+      - db
     volumes:
-      # Mapeia a pasta de código para que as alterações no app.py sejam refletidas
-      # O Streamlit está configurado para rodar o app.py dentro do container
       - ./data_analysis:/app
 
-# Define os volumes que serão gerenciados pelo Docker
 volumes:
   postgres_data:

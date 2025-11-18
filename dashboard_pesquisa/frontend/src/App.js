@@ -6,7 +6,7 @@ import FuncionariosPorAreaChart from './components/FuncionariosPorAreaChart';
 import MediaFeedbackChart from './components/MediaFeedbackChart';
 import EnpsDistribuicaoChart from './components/EnpsDistribuicaoChart';
 
-const API_BASE_URL = 'http://localhost:3001/api';
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:3001/api';
 
 function App() {
   const [dashboardData, setDashboardData] = useState(null);
