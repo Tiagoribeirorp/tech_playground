@@ -38,7 +38,7 @@ tech_playground/ (RAIZ)
 ├── 📄 data.csv
 ├── 📄 data1.csv
 │
-├── 📁 backend/ (PASTA VAZIA ou COM CÓDIGO?)
+├── 📁 backend/ 
 ├── 📁 frontend/ (APP REACT)
 │   ├── src/
 │   │   ├── App.js
