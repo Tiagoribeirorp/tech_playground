@@ -33,17 +33,41 @@ O projeto foi dividido em três grandes fases, cobrindo um ciclo de desenvolvime
 
 ```
 TECH_PLAYGROUND/
-├── __tests__/                  # Testes do Backend (Jest)
-├── data_analysis/              # Aplicação de Análise de Dados (Python/Streamlit)
-├── dashboard_pesquisa/         # Aplicação Frontend (React)
-├── data/                       # Dados brutos e scripts SQL
-├── backend.Dockerfile          # Instruções para construir a imagem Docker do Backend
-├── frontend.Dockerfile         # Instruções para construir a imagem Docker do Frontend
-├── docker-compose.yml          # Orquestrador de todos os serviços Docker
-├── jest.config.js              # Configuração do Jest para o Backend
-├── package.json                # Dependências e scripts do Backend
-└── server.js                   # API do Backend (Node.js/Express)
-```
+tech_playground/ (RAIZ)
+├── 📄 backend.Dockerfile
+├── 📄 frontend.Dockerfile  
+├── 📄 streamlit.Dockerfile
+├── 📄 docker-compose.yml
+├── 📄 server.js (BACKEND - Express API)
+├── 📄 package.json
+├── 📄 package-lock.json
+├── 📄 jest.config.js
+├── 📄 README.md
+├── 📄 data.csv
+├── 📄 data1.csv
+│
+├── 📁 backend/ 
+├── 📁 frontend/ (APP REACT)
+│   ├── src/
+│   │   ├── App.js
+│   │   ├── components/
+│   │   │   ├── Filtros.js
+│   │   │   ├── FuncionariosPorAreaChart.js
+│   │   │   ├── MediaFeedbackChart.js
+│   │   │   └── EnpsDistribuicaoChart.js
+│   │   └── ...
+│   └── package.json
+│
+├── 📁 data_analysis/ (STREAMLIT APP)
+│   ├── app.py
+│   └── ...
+│
+├── 📁 db_init/ (INICIALIZAÇÃO DO BANCO)
+│   ├── init.sql
+│   └── data1.csv
+│
+├── 📁 __tests__/ (TESTES)
+└── 📁 .git/ (GIT)
 
 ---
 
