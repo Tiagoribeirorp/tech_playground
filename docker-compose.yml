@@ -16,8 +16,8 @@ services:
   backend:
     container_name: dashboard_backend
     build:
-      context: .  # ✅ Raiz
-      dockerfile: backend.Dockerfile  # ✅ Na raiz
+      context: .
+      dockerfile: backend.Dockerfile
     restart: always
     ports:
       - "3001:3001"
@@ -33,8 +33,8 @@ services:
   frontend:
     container_name: dashboard_frontend
     build:
-      context: .  # ✅ Raiz
-      dockerfile: frontend.Dockerfile  # ✅ Na raiz
+      context: .
+      dockerfile: frontend.Dockerfile
     restart: always
     ports:
       - "8080:80"
@@ -46,8 +46,8 @@ services:
   streamlit:
     container_name: dashboard_streamlit
     build:
-      context: .  # ✅ Raiz
-      dockerfile: streamlit.Dockerfile  # ✅ Na raiz
+      context: .
+      dockerfile: streamlit.Dockerfile
     restart: always
     ports:
       - "8501:8501"
@@ -55,6 +55,23 @@ services:
       - db
     volumes:
       - ./data_analysis:/app
+
+  # ⭐⭐ NOVO SERVIÇO GO-API ⭐⭐
+  go-api:
+    container_name: dashboard_go_api
+    build:
+      context: ./go-api
+      dockerfile: Dockerfile
+    ports:
+      - "3002:3002"
+    depends_on:
+      - db
+    environment:
+      - DB_HOST=db
+      - DB_USER=postgres
+      - DB_PASSWORD=Bioquimica@1
+      - DB_NAME=postgres
+      - DB_PORT=5432
 
 volumes:
   postgres_data:
