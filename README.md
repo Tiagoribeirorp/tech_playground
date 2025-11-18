@@ -6,6 +6,7 @@
 ![Streamlit](https://img.shields.io/badge/Streamlit-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white )
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?style=for-the-badge&logo=postgresql&logoColor=white )
 ![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white )
+![Go](https://img.shields.io/badge/Go-00ADD8?style=for-the-badge&logo=go&logoColor=white)
 ![Jest](https://img.shields.io/badge/Jest-C21325?style=for-the-badge&logo=jest&logoColor=white )
 
 Este repositório contém um projeto completo que abrange o desenvolvimento de ponta a ponta: desde a criação de um banco de dados e uma API, passando por um dashboard operacional em React, até uma aplicação de análise de dados com Python e Streamlit, tudo orquestrado com Docker.
@@ -163,6 +164,51 @@ O projeto possui duas suítes de testes independentes.
 *   **Task 11 (Geração de Relatório):** Experimento com a criação de um modo "relatório" no Streamlit para exportação. (deixei de standby)
 *   **Task 12 (Exploração Criativa):** Análise de "Favorabilidade" inspirada na documentação da pesquisa, criando um gráfico de barras empilhadas para entender a composição das respostas além das médias.
 
----
+# 🚀 API Go - Bônus Tech Stack - Task 9.1
 
+## 📖Sobre a API Go
+Implementação alternativa da API em Go utilizando o framework Gin, criada como bônus para demonstrar a conexáo entre o a API e o banco de dados.
+
+**🚀 Características:**
+- ⚡ **Performance**: Compilação nativa com Go 1.23
+- 🎯 **Framework**: Gin para APIs web
+- 🐳 **Containerizada**: Docker e integra com o PostgreSQL
+- 📊 **Endpoints**: Health check, contagem, áreas
+
+---
+## 🏗️ Arquitetura
+
+```
+go-api/
+├── main.go              # Servidor principal
+├── go.mod              # Gerenciador de dependências
+├── go.sum              # Lock de dependências
+└── Dockerfile          # Containerização
+```
+
+## 📡 Endpoints Disponíveis
+
+<div align="center">
+
+![Go](https://img.shields.io/badge/Go-00ADD8?style=for-the-badge&logo=go&logoColor=white)
+![Gin](https://img.shields.io/badge/Gin-00ADD8?style=for-the-badge&logo=go&logoColor=white)
+
+**Implementação alternativa em Go demonstrando versatilidade técnica**
+
+</div>
+
+### 📡 Endpoints Disponíveis
+
+| Método | Endpoint | Descrição | Exemplo de Resposta |
+|--------|----------|-----------|---------------------|
+| `GET` | `/health` | Health check da API | ```json<br>{<br>  "status": "OK",<br>  "message": "API Go + PostgreSQL rodando!"<br>}``` |
+| `GET` | `/employees/count` | Contagem total de funcionários | ```json<br>{<br>  "total_employees": 500,<br>  "source": "Go API"<br>}``` |
+| `GET` | `/areas` | Lista áreas únicas do dataset | ```json<br>{<br>  "areas": ["Administrativo", "Comercial", ...],<br>  "count": 10,<br>  "source": "Go API"<br>}``` |
+
+**🚀 Como testar:**
+```bash
+curl http://localhost:3002/health
+curl http://localhost:3002/employees/count  
+curl http://localhost:3002/areas
+```
 
